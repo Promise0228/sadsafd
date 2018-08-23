@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- ssm整合之后，mybatis-config.xml中只需要配置别名和映射器
+     数据库环境由spring-bean.xml接管 -->
+<configuration>
+     <!-- 配置po包中实体类的别名 -->
+     <typeAliases>
+          <package name="com.byzx.sm.po"/>
+     </typeAliases>
+     <!-- 配置位于dao层的映射器 -->
+     <mappers>
+          <package name="com.byzx.sm.dao"/>
+     </mappers>
+</configuration>

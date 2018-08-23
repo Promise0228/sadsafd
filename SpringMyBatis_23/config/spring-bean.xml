@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+    <!-- 配置全局注解标签 -->
+    <context:annotation-config></context:annotation-config>
+    <!-- 引用外部的db.properties -->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!-- 配置数据源，也就是对数据库进行连接 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+          <property name="driverClassName" value="${db.driver}"></property>
+          <property name="url" value="${db.url}"></property>
+          <property name="username" value="${db.username}"></property>
+          <property name="password" value="${db.password}"></property>
+    </bean>
+    <!-- 配置SqlsessionFactory 【主要包含：（mybatis-config.xml:别名，映射器）、数据源（在spring-bean.xml）】-->
+    <bean id="sqlsessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+          <!-- 数据库连接池 -->
+          <property name="dataSource" ref="dataSource"></property>
+          <!-- 关联mybatis-config.xml -->
+          <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+    </bean>
+    <!-- 将MyBatis的dao层和Spring的到层进行整合 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+         <!-- 配置dao层的注解标签 -->
+         <property name="basePackage" value="com.byzx.sm.dao"></property>
+         <!-- 配置mybatis -->
+         <property name="sqlSessionFactoryBeanName" value="sqlsessionFactory"></property>
+    </bean>
+    <!-- 目前只是用来做测试 -->
+    <bean id="userService" class="com.byzx.sm.service.UserService"></bean>
+</beans>

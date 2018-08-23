@@ -1,0 +1,32 @@
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.byzx.sm.dao.UserDao">
+	<!-- 查询所有用户信息 接口中的方法名跟标签中的id名一致， 接口中的返回值类型跟标签中resultType【输出映射】保持一致，当然不管返回结果是对象还是集合 
+		在标签中，统一用对象接收 -->
+	<select id="findUsers" resultType="User">
+		select * from user
+	</select>
+	<!-- 根据用户名模糊查询用户信息 parameterType【输入映射】跟接口中的参数保持一致 #{}是占位符，类似于之前接触的"?"#{username}是对应的User对象中的username属性 -->
+	<select id="findUsersByUserName" parameterType="User"
+		resultType="User">
+		select * from user where username like "%"#{username}"%"
+	</select>
+	<!-- 新增一个用户信息 -->
+	<insert id="addUser" parameterType="User">
+		insert into user(username,password,sex,address)
+		values(#{username},#{password},#{sex},#{address})
+		<!-- 将插入数据的主键返回， 返回到 user 对象中 -->
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+	<!-- 根据id修改用户信息 -->
+	<update id="updateUser" parameterType="User">
+	    update user set username=#{username},password=#{password} where id=#{id}
+	</update>
+	<!-- 根据id删除用户信息 -->
+	<delete id="deleteUser" parameterType="int">
+	    delete from user where id = #{value}
+	</delete>
+</mapper>
